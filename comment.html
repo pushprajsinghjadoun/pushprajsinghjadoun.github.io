@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js/bootstrap.js"></script>
+</head>
+<style>
+
+video{
+    width: 100%;
+    height: 80vh;
+    background-color: #000;
+    border: 1px solid #000;
+}
+.col-4
+{
+   height: 90vh;
+    background-color: rgb(236, 241, 241);
+}
+textarea{
+    position: absolute;
+    right: 5;
+    bottom: 20vh;
+    border-radius: 1vw;
+    border: 2px solid;
+}
+textarea:focus{
+    outline: none;
+}
+body{
+    background-color: #7CB9E8;
+}
+#commentbutton{
+    position: absolute;
+    right: 5;
+    bottom: 10vh;
+    width: 10vw;
+    height: 7vh;
+    border-radius: 0.8vw;
+    font-size: 3vh;
+    background-color: #7CB9E8;
+    border: none;
+}
+.scr{
+    overflow: scroll;
+    height: 60vh;
+}
+#logout{
+    margin-bottom: 3vh;
+    margin-top: 2vh;
+    margin-left: 70%;
+    height: 5vh;
+    width: 10vw;
+    font-size: 2vh;
+    border: none;
+    border-radius: 0.5vw;
+}
+</style>
+<body>
+
+    <div class="container">
+        <button id="logout" onclick="logout()">Logout</button>
+        <div class="row">
+            <div class="col-8">
+                <video  autoplay loop muted>
+                    <source src="img/video.mp4" type="video/mp4">
+                   
+                    Your browser does not support the video tag.
+                  </video>
+            </div>
+            <div class="col-4">
+                <div class="scr">
+                    
+                    <div class="comments" id="commentss">
+                        
+                    </div>
+                   
+
+                </div>
+                <div class="input">
+                    <textarea name="textarea" style="resize:none" id="textarea" cols="40" rows="3" autocomplete="off"></textarea>
+                    <button id="commentbutton" onclick="button()">Comment</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+</body>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+<script>
+    var firebaseConfig = {
+  
+  apiKey: "AIzaSyB1SEaWtKNyYHwepc91rRIys7qrAn3VCQ0",
+
+  authDomain: "form-efe8c.firebaseapp.com",
+
+  databaseURL: "https://form-efe8c-default-rtdb.firebaseio.com",
+
+  projectId: "form-efe8c",
+
+  storageBucket: "form-efe8c.appspot.com",
+
+  messagingSenderId: "1007553602245",
+
+  appId: "1:1007553602245:web:6bea88e0de9877ce7ac6ac"
+
+};
+ firebase.initializeApp(firebaseConfig);
+ const auth = firebase.auth();
+ var db = firebase.firestore();
+
+function button()
+{
+    var textarea = document.getElementById("textarea").value;
+    var start = Date.now();
+     var n = start.toString();
+    console.log(start);
+    db.collection("comments").doc(n).set({
+   Comment: textarea,
+   timestamp: n,
+   bool: true
+})
+.then(() => {
+    console.log("Document successfully written!");
+    
+})
+.catch((error) => {
+    console.error("Error writing document: ", error);
+
+});
+
+}
+
+db.collection("comments").where("bool", "==", true)
+    .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+
+            var commentt = change.doc.data().Comment;
+       var timestampp = change.doc.data().timestamp;
+
+       var comm =  document.getElementById("commentss");
+       var h = document.createElement('h2');
+       var p = document.createElement('p');
+
+       h.innerHTML = commentt;
+       p.innerHTML = timestampp;
+
+       comm.appendChild(h); comm.appendChild(p);
+
+            console.log("Current data: ", change.doc.data());
+
+
+        });
+    });
+
+
+
+function logout()
+{
+    window.location.href = "logout.html";
+}
+</script>
+
+
+</html>

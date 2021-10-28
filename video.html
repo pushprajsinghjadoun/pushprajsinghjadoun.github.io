@@ -188,7 +188,7 @@
                     // localStorage.removeItem('videotitle');
                 </script>
                 <div class="comments">
-                    <input type="text" id="inputss" class="form-control" autocomplete="off" placeholder="Write Somethings here" required>
+                    <input type="text" id="inputss" class="form-control" autocomplete="off" placeholder="Write Somethings here"  required>
                     <button type="submit" id="buttonid" onclick="addcomment()">Comment</button>
                 </div>
                 <div class="m" id="main">
@@ -456,12 +456,15 @@ fetchdata();
   {
 
     var textarea = document.getElementById("inputss").value;
+     document.getElementById("inputss").value = '';
     var email1 = localStorage.getItem('name');
     var start = Date.now();
     var n = start.toString();
     var id = localStorage.getItem('id');
     console.log(textarea);
-    db.collection("comments").doc(n).set({
+    if(textarea!="")
+    {
+      db.collection("comments").doc(n).set({
    Comment: textarea,
    timestamp: n,
    bool: true,
@@ -476,9 +479,7 @@ fetchdata();
     console.error("Error writing document: ", error);
 
 });
-
-
-    var textarea = document.getElementById("inputss").value;
+// var textarea = document.getElementById("inputss").value;
     var email1 = localStorage.getItem('name');
     
 
@@ -504,6 +505,10 @@ fetchdata();
     
     target.insertBefore(dd,target.childNodes[0]);
     document.getElementById("commdiv").value="";
+    }
+
+
+
     
     
   }
